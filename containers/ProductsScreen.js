@@ -1,28 +1,32 @@
 import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/core";
+import { useState } from "react";
 
 // ProductScreen reçoit la props navigation
 const ProductScreen = () => {
-    const navigation = useNavigation();
+    const nav = useNavigation();
+    const [listProduct, setListProduct] = useState(null);
 
     return (
-        <View>
-            {/* <Button
-                title="Go to Camera"
-                // La fonction navigate() permet de naviguer vers un écran. On lui passe comme argument le nom de l'écran vers lequel on souhaite naviguer (ce nom se trouve dans App.js)
-                onPress={() => {
-                    navigation.navigate("Camera");
-                }}
-            /> */}
-
-            <Button
-                title="Go to Produit"
-                onPress={() => {
-                    navigation.navigate("Product");
-                }}
-            />
-        </View>
+        <SafeAreaView>
+            {listProduct === null ? (
+                <>
+                    <Text>Nothing yet : </Text>
+                    <Button
+                        title="Go to scan a product"
+                        onPress={() => nav.navigate("Camera")}
+                    />
+                </>
+            ) : (
+                <Button
+                    title="Go to Produit"
+                    onPress={() => {
+                        nav.navigate("Product");
+                    }}
+                />
+            )}
+        </SafeAreaView>
     );
 };
 export default ProductScreen;

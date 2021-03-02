@@ -1,19 +1,19 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 
 const CameraScreen = () => {
-    const navigation = useNavigation();
+    const nav = useNavigation();
 
     return (
-        <View>
+        <SafeAreaView>
             <Button
                 title="Go to Produit"
                 onPress={() => {
-                    navigation.navigate("Product");
+                    nav.navigate("Product");
                 }}
             />
-        </View>
+        </SafeAreaView>
     );
 };
 export default CameraScreen;

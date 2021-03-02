@@ -18,7 +18,7 @@ const ProductScreen = () => {
                     <Text>Nothing yet : </Text>
                     <Button
                         title="Go to scan a product"
-                        onPress={() => nav.navigate("Camera")}
+                        onPress={() => nav.navigate("CameraTab")}
                     />
                 </>
             ) : (

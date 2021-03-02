@@ -1,14 +1,15 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import {
+    FontAwesome5,
+    MaterialCommunityIcons,
+    Entypo,
+} from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
 
 const Stack = createStackNavigator();
@@ -60,7 +61,7 @@ export default function App() {
                                 tabBarPosition="bottom"
                             >
                                 <Tab.Screen
-                                    name="Products"
+                                    name="ProductsTab"
                                     options={{
                                         tabBarLabel: "Historique",
                                         tabBarIcon: ({ color, size }) => (
@@ -86,15 +87,6 @@ export default function App() {
                                             </Stack.Screen>
 
                                             <Stack.Screen
-                                                name="Camera"
-                                                options={{
-                                                    title: "Camera",
-                                                }}
-                                            >
-                                                {() => <CameraScreen />}
-                                            </Stack.Screen>
-
-                                            <Stack.Screen
                                                 name="Product"
                                                 options={{
                                                     title: "Product",
@@ -108,7 +100,7 @@ export default function App() {
 
                                 {/* CameraScreen */}
                                 <Tab.Screen
-                                    name="Camera"
+                                    name="CameraTab"
                                     options={{
                                         tabBarLabel: "Scan",
                                         tabBarIcon: ({ color, size }) => (
@@ -148,7 +140,7 @@ export default function App() {
                                 {/* FavoritesScreen */}
 
                                 <Tab.Screen
-                                    name="Favorites"
+                                    name="FavoritesTab"
                                     options={{
                                         tabBarLabel: "Favorites",
                                         tabBarIcon: ({ color, size }) => (

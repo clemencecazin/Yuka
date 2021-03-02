@@ -2,6 +2,10 @@ import React from "react";
 import { View, Text, Button, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 
+// Envoi données produit scanné vers app.js
+
+// Reçoit données pour envoyer vers fiche produit
+
 const CameraScreen = () => {
     const nav = useNavigation();
 

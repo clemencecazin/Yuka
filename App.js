@@ -86,13 +86,12 @@ export default function App() {
                                             </Stack.Screen>
 
                                             <Stack.Screen
-                                                component="Camera"
                                                 name="Camera"
                                                 options={{
                                                     title: "Camera",
                                                 }}
                                             >
-                                                {/* {() => <CameraScreen />} */}
+                                                {() => <CameraScreen />}
                                             </Stack.Screen>
 
                                             <Stack.Screen

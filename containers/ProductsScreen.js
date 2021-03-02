@@ -3,7 +3,10 @@ import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useState } from "react";
 
-// ProductScreen reçoit la props navigation
+// ProductScreen reçoit les details du produits et ajoute tableau de produits
+
+// Produit renvoi vers la fiche
+
 const ProductScreen = () => {
     const nav = useNavigation();
     const [listProduct, setListProduct] = useState(null);

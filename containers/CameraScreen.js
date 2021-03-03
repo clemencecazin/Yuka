@@ -1,8 +1,16 @@
 import React from "react";
-import { View, Text, Button, SafeAreaView, StyleSheet } from "react-native";
+import {
+    View,
+    Text,
+    Button,
+    SafeAreaView,
+    StyleSheet,
+    TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useEffect, useState } from "react";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 // Envoi données produit scanné vers app.js
 
@@ -52,18 +60,33 @@ const CameraScreen = () => {
                     style={StyleSheet.absoluteFillObject}
                 />
 
-                <Button
-                    title="Go to Produit"
-                    onPress={() => {
-                        nav.navigate("Product", { data: data });
-                    }}
-                />
-
-                {scanned && (
+                {!scanned && (
                     <Button
-                        title={"Tap to Scan Again"}
+                        backgroundColor="black"
+                        color="#f194ff"
+                        title={"Scan"}
                         onPress={() => setScanned(false)}
                     />
+                )}
+
+                {scanned && (
+                    <>
+                        <Button
+                            backgroundColor="black"
+                            color="#f194ff"
+                            style={styles.button}
+                            title={"Tap to Scan Again"}
+                            onPress={() => setScanned(false)}
+                        />
+                        <Button
+                            backgroundColor="black"
+                            color="#f194ff"
+                            title="Go to Produit"
+                            onPress={() => {
+                                nav.navigate("Product", { data: data });
+                            }}
+                        />
+                    </>
                 )}
             </View>
             <Text style={styles.text}>{data}</Text>
@@ -74,4 +97,5 @@ export default CameraScreen;
 
 const styles = StyleSheet.create({
     text: { fontSize: 34 },
+    button: { color: "#f194ff" },
 });

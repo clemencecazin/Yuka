@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
@@ -23,10 +22,6 @@ import FavoritesScreen from "./containers/FavoritesScreen";
 import { useEffect } from "react";
 
 export default function App() {
-    const setData = async (data) => {
-        AsyncStorage.setItem("data", data);
-    };
-
     // useEffect(() => {
     //     const bootstrapAsync = async () => {
     //         const productToken = await AsyncStorage.getItem("data");

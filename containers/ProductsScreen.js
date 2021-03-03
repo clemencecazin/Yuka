@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useState, useEffect } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 const axios = require("axios");
 
 // ProductScreen reçoit les details du produits et ajoute tableau de produits
@@ -17,47 +17,69 @@ const axios = require("axios");
 // Produit renvoi vers la fiche
 
 const ProductScreen = ({ productData, navigation }) => {
-    const nav = useNavigation();
     const [listProduct, setListProduct] = useState(null);
-    const [name, setName] = useState();
-    const [picture, setPicture] = useState();
-    const [brand, setBrand] = useState();
+    const [listing, setListing] = useState([]);
 
+    // console.log(productData);
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(
                     `https://world.openfoodfacts.org/api/v0/product/${productData}`
                 );
-                console.log(response.data);
+                // console.log(response.data);
+                // On copie le tableau et on push les infos souhaitées
+                const newProduct = [...listing];
 
-                // Rendu du produit
+                // Si le produit n'est pas présent
+                if (newProduct.indexOf(response.data.product.id) === -1) {
+                    newProduct.push({
+                        code: response.data.product.code,
+                        name: response.data.product.product_name,
+                        image: response.data.product.image_front_small_url,
+                        brand: response.data.product.brands,
+                    });
+                    setListing(newProduct);
+                }
 
-                setName(response.data.product.product_name);
-                setPicture(response.data.product.image_front_small_url);
-                setBrand(response.data.product.brands);
+                console.log(listing);
             } catch (error) {
                 console.log(error.response);
             }
         };
         fetchData();
-    }, []);
+    }, [productData]);
 
     return (
         <SafeAreaView>
-            <TouchableOpacity
-                onPress={() => {
-                    navigation.push(
-                        "Product",
-                        { data: productData }
-                        // Navigation vers Product avec la data à passer en param dans la fiche produit
+            <FlatList
+                data={listing}
+                renderItem={({ item }) => {
+                    return (
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.push(
+                                    "Product",
+                                    { data: item.code }
+                                    // Navigation vers Product avec la data à passer en param dans la fiche produit
+                                );
+                            }}
+                        >
+                            <Image
+                                source={{ uri: item.image }}
+                                style={styles.productImage}
+                            />
+                            <Text>{item.name}</Text>
+                            <Text>{item.brand}</Text>
+                        </TouchableOpacity>
                     );
                 }}
-            >
-                <Image source={{ uri: picture }} style={styles.productImage} />
+                keyExtractor={(item) => item.code}
+            />
+
+            {/* <Image source={{ uri: picture }} style={styles.productImage} />
                 <Text>{name}</Text>
-                <Text>{brand}</Text>
-            </TouchableOpacity>
+                <Text>{brand}</Text> */}
             {/* {listProduct === null ? (
                 <>
                     <Text>Nothing yet : </Text>

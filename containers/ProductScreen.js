@@ -31,7 +31,10 @@ const ProductScreen = () => {
                 const response = await axios.get(
                     `https://world.openfoodfacts.org/api/v0/product/${params.data}`
                 );
-                console.log(response.data);
+                // console.log(response.data);
+
+                // Rendu du produit
+
                 setName(response.data.product.product_name);
                 setPicture(response.data.product.image_front_small_url);
                 setBrand(response.data.product.brands);

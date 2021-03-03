@@ -16,7 +16,7 @@ import { TouchableHighlight } from "react-native-gesture-handler";
 
 // Reçoit données pour envoyer vers fiche produit
 
-const CameraScreen = () => {
+const CameraScreen = ({ setInfos }) => {
     const nav = useNavigation();
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
@@ -34,7 +34,11 @@ const CameraScreen = () => {
         setScanned(true);
         alert(`Bar code with type ${type} and data ${data} has been scanned!`);
         setData(data);
-        console.log(data);
+
+        // Info apporté à App.js
+        setInfos(data);
+
+        // console.log(data);
     };
 
     if (hasPermission === null) {

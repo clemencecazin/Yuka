@@ -22,12 +22,24 @@ import FavoritesScreen from "./containers/FavoritesScreen";
 import { useEffect } from "react";
 
 export default function App() {
-    // useEffect(() => {
-    //     const bootstrapAsync = async () => {
-    //         const productToken = await AsyncStorage.getItem("data");
-    //     };
-    //     bootstrapAsync();
-    // }, []);
+    const [productData, setProductData] = useState();
+
+    // Enreigstrement de la Data passée
+    const setInfos = async (infos) => {
+        AsyncStorage.setItem("productData", infos);
+        setProductData(infos);
+    };
+
+    // Récupération de la data
+    useEffect(() => {
+        const bootstrapAsync = async () => {
+            const productData = await AsyncStorage.getItem("productData");
+            setProductData(productData);
+        };
+        // console.log(productData);
+
+        bootstrapAsync();
+    }, []);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -90,7 +102,14 @@ export default function App() {
                                                     title: "Historique",
                                                 }}
                                             >
-                                                {() => <ProductsScreen />}
+                                                {(props) => (
+                                                    <ProductsScreen
+                                                        {...props}
+                                                        productData={
+                                                            productData
+                                                        }
+                                                    />
+                                                )}
                                             </Stack.Screen>
 
                                             <Stack.Screen
@@ -129,7 +148,11 @@ export default function App() {
                                                     headerShown: false,
                                                 }}
                                             >
-                                                {() => <CameraScreen />}
+                                                {() => (
+                                                    <CameraScreen
+                                                        setInfos={setInfos}
+                                                    />
+                                                )}
                                             </Stack.Screen>
 
                                             <Stack.Screen

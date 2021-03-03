@@ -47,11 +47,10 @@ const ProductScreen = ({ productData, navigation }) => {
         <SafeAreaView>
             <TouchableOpacity
                 onPress={() => {
-                    //ici on fait un navigation.push pour naviguer vers un "nouveau" screen Character et non pas un navigation.navigate qui "retournerait" sur l'ancien
                     navigation.push(
                         "Product",
                         { data: productData }
-                        //Lors de la navigation vers le Screen Character je passe le params item
+                        // Navigation vers Product avec la data à passer en param dans la fiche produit
                     );
                 }}
             >

@@ -9,13 +9,14 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useState, useEffect } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const axios = require("axios");
 
 // ProductScreen reçoit les details du produits et ajoute tableau de produits
 
 // Produit renvoi vers la fiche
 
-const ProductScreen = ({ productData }) => {
+const ProductScreen = ({ productData, navigation }) => {
     const nav = useNavigation();
     const [listProduct, setListProduct] = useState(null);
     const [name, setName] = useState();
@@ -44,9 +45,20 @@ const ProductScreen = ({ productData }) => {
 
     return (
         <SafeAreaView>
-            <Image source={{ uri: picture }} style={styles.productImage} />
-            <Text>{name}</Text>
-            <Text>{brand}</Text>
+            <TouchableOpacity
+                onPress={() => {
+                    //ici on fait un navigation.push pour naviguer vers un "nouveau" screen Character et non pas un navigation.navigate qui "retournerait" sur l'ancien
+                    navigation.push(
+                        "Product",
+                        { data: productData }
+                        //Lors de la navigation vers le Screen Character je passe le params item
+                    );
+                }}
+            >
+                <Image source={{ uri: picture }} style={styles.productImage} />
+                <Text>{name}</Text>
+                <Text>{brand}</Text>
+            </TouchableOpacity>
             {/* {listProduct === null ? (
                 <>
                     <Text>Nothing yet : </Text>

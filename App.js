@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
@@ -10,7 +11,6 @@ import {
     MaterialCommunityIcons,
     Entypo,
 } from "@expo/vector-icons";
-import AppLoading from "expo-app-loading";
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -20,8 +20,20 @@ import ProductsScreen from "./containers/ProductsScreen";
 import CameraScreen from "./containers/CameraScreen";
 import ProductScreen from "./containers/ProductScreen";
 import FavoritesScreen from "./containers/FavoritesScreen";
+import { useEffect } from "react";
 
 export default function App() {
+    const setData = async (data) => {
+        AsyncStorage.setItem("data", data);
+    };
+
+    // useEffect(() => {
+    //     const bootstrapAsync = async () => {
+    //         const productToken = await AsyncStorage.getItem("data");
+    //     };
+    //     bootstrapAsync();
+    // }, []);
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <NavigationContainer>

@@ -6,17 +6,18 @@ import { useNavigation } from "@react-navigation/core";
 
 // Produit renvoi vers la fiche
 
-const FavoritesScreen = () => {
+const FavoritesScreen = ({ productFavorite }) => {
     const nav = useNavigation();
-
+    console.log(productFavorite.name);
     return (
         <SafeAreaView>
-            <Button
+            {/* <Button
                 title="Go to Produit"
                 onPress={() => {
                     nav.navigate("Product");
                 }}
-            />
+            /> */}
+            <Text>{productFavorite.name}</Text>
         </SafeAreaView>
     );
 };

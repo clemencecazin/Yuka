@@ -17,12 +17,12 @@ const axios = require("axios");
 // Produit renvoi vers la fiche
 
 const ProductScreen = ({ productData, navigation }) => {
-    const [listProduct, setListProduct] = useState(null);
     const [listing, setListing] = useState([]);
 
     // console.log(productData);
     useEffect(() => {
         const fetchData = async () => {
+            console.log(listing);
             try {
                 const response = await axios.get(
                     `https://world.openfoodfacts.org/api/v0/product/${productData}`
@@ -52,30 +52,35 @@ const ProductScreen = ({ productData, navigation }) => {
 
     return (
         <SafeAreaView>
-            <FlatList
-                data={listing}
-                renderItem={({ item }) => {
-                    return (
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.push(
-                                    "Product",
-                                    { data: item.code }
-                                    // Navigation vers Product avec la data à passer en param dans la fiche produit
-                                );
-                            }}
-                        >
-                            <Image
-                                source={{ uri: item.image }}
-                                style={styles.productImage}
-                            />
-                            <Text>{item.name}</Text>
-                            <Text>{item.brand}</Text>
-                        </TouchableOpacity>
-                    );
-                }}
-                keyExtractor={(item) => item.code}
-            />
+            {listing === [] ? (
+                <Text>Nothing yet</Text>
+            ) : (
+                <FlatList
+                    data={listing}
+                    renderItem={({ item }) => {
+                        return (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.push(
+                                        "Product",
+                                        { data: item.code }
+                                        // Navigation vers Product avec la data à passer en param dans la fiche produit
+                                    );
+                                }}
+                            >
+                                <Image
+                                    source={{ uri: item.image }}
+                                    style={styles.productImage}
+                                    resizeMode="contain"
+                                />
+                                <Text>{item.name}</Text>
+                                <Text>{item.brand}</Text>
+                            </TouchableOpacity>
+                        );
+                    }}
+                    keyExtractor={(item) => item.code}
+                />
+            )}
 
             {/* <Image source={{ uri: picture }} style={styles.productImage} />
                 <Text>{name}</Text>
@@ -102,5 +107,5 @@ const ProductScreen = ({ productData, navigation }) => {
 export default ProductScreen;
 
 const styles = StyleSheet.create({
-    productImage: { height: 160, width: 100 },
+    productImage: { height: 260, width: 200 },
 });

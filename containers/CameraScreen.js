@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/core";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useEffect, useState } from "react";
 import { TouchableHighlight } from "react-native-gesture-handler";
+import { Redirect } from "react-router-dom"; //rappel
 
 // Envoi données produit scanné vers app.js
 
@@ -21,6 +22,7 @@ const CameraScreen = ({ setInfos }) => {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [data, setData] = useState(null);
+    const [messageProduct, setMessageProduct] = useState("");
 
     useEffect(() => {
         (async () => {
@@ -32,7 +34,19 @@ const CameraScreen = ({ setInfos }) => {
     const handleBarCodeScanned = ({ type, data }) => {
         // console.log(data);
         setScanned(true);
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+        setMessageProduct(
+            <>
+                Votre produit a bien été scanné
+                <Button
+                    color="blue"
+                    title="Go to Produit"
+                    onPress={() => {
+                        nav.navigate("Product", { data: data });
+                    }}
+                />
+            </>
+        );
+        // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
         setData(data);
 
         // Info apporté à App.js
@@ -67,7 +81,7 @@ const CameraScreen = ({ setInfos }) => {
                 {!scanned && (
                     <Button
                         backgroundColor="black"
-                        color="#f194ff"
+                        color="white"
                         title={"Scan"}
                         onPress={() => setScanned(false)}
                     />
@@ -76,23 +90,16 @@ const CameraScreen = ({ setInfos }) => {
                 {scanned && (
                     <>
                         <Button
-                            backgroundColor="black"
-                            color="#f194ff"
+                            color="white"
                             style={styles.button}
                             title={"Tap to Scan Again"}
                             onPress={() => setScanned(false)}
                         />
-                        <Button
-                            backgroundColor="black"
-                            color="#f194ff"
-                            title="Go to Produit"
-                            onPress={() => {
-                                nav.navigate("Product", { data: data });
-                            }}
-                        />
                     </>
                 )}
             </View>
+            <Text style={styles.text}>{messageProduct}</Text>
+
             <Text style={styles.text}>{data}</Text>
         </>
     );
@@ -100,6 +107,5 @@ const CameraScreen = ({ setInfos }) => {
 export default CameraScreen;
 
 const styles = StyleSheet.create({
-    text: { fontSize: 34 },
-    button: { color: "#f194ff" },
+    text: { fontSize: 24, color: "red" },
 });

@@ -22,19 +22,34 @@ import FavoritesScreen from "./containers/FavoritesScreen";
 import { useEffect } from "react";
 
 export default function App() {
-    const [productData, setProductData] = useState();
+    const [productData, setProductData] = useState(null);
+    const [productFavorite, setProductFavorite] = useState();
+
+    // const [productObj, setProductObj] = useState();
 
     // Enreigstrement de la Data passée
     const setInfos = async (infos) => {
         AsyncStorage.setItem("productData", infos);
+
         setProductData(infos);
+    };
+
+    const setFavorite = async (value) => {
+        AsyncStorage.setItem("productFavorite", value);
+        setProductFavorite(value);
+        console.log(value);
     };
 
     // Récupération de la data
     useEffect(() => {
         const bootstrapAsync = async () => {
             const productData = await AsyncStorage.getItem("productData");
+            const productFavorite = await AsyncStorage.getItem(
+                "productFavorite"
+            );
+
             setProductData(productData);
+            setProductFavorite(productFavorite);
         };
         // console.log(productData);
 
@@ -118,7 +133,13 @@ export default function App() {
                                                     title: "Product",
                                                 }}
                                             >
-                                                {() => <ProductScreen />}
+                                                {() => (
+                                                    <ProductScreen
+                                                        setFavorite={
+                                                            setFavorite
+                                                        }
+                                                    />
+                                                )}
                                             </Stack.Screen>
                                         </Stack.Navigator>
                                     )}
@@ -161,7 +182,13 @@ export default function App() {
                                                     title: "Product",
                                                 }}
                                             >
-                                                {() => <ProductScreen />}
+                                                {() => (
+                                                    <ProductScreen
+                                                        setFavorite={
+                                                            setFavorite
+                                                        }
+                                                    />
+                                                )}
                                             </Stack.Screen>
                                         </Stack.Navigator>
                                     )}
@@ -192,7 +219,14 @@ export default function App() {
                                                     tabBarLabel: "Favorites",
                                                 }}
                                             >
-                                                {() => <FavoritesScreen />}
+                                                {(props) => (
+                                                    <FavoritesScreen
+                                                        {...props}
+                                                        productFavorite={
+                                                            productFavorite
+                                                        }
+                                                    />
+                                                )}
                                             </Stack.Screen>
 
                                             <Stack.Screen

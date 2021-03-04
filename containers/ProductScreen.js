@@ -16,15 +16,16 @@ const axios = require("axios");
 
 // Possibilité d'ajouter en favoris -> envoi
 
-const ProductScreen = () => {
+const ProductScreen = ({ setFavorite }) => {
     const [name, setName] = useState();
     const [picture, setPicture] = useState();
     const [brand, setBrand] = useState();
+    const [productObj, setProductObj] = useState();
+    const [messageFav, setMessageFav] = useState("");
 
     const { params } = useRoute();
     // const id = route.params.data;
     // console.log(params);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -45,14 +46,35 @@ const ProductScreen = () => {
         fetchData();
     }, []);
 
+    const addFavorites = () => {
+        setMessageFav("Produits ajouté en favoris");
+        setFavorite(
+            JSON.stringify({
+                name: "Farid",
+                age: "32",
+            })
+        );
+    };
+
     return (
         <SafeAreaView>
             <Text>data : {params.data}</Text>
 
             <View>
-                <Image source={{ uri: picture }} style={styles.productImage} />
+                <Image
+                    source={{ uri: picture }}
+                    style={styles.productImage}
+                    resizeMode="contain"
+                />
                 <Text>{name}</Text>
                 <Text>{brand}</Text>
+                <Button
+                    title="Add to favorites"
+                    onPress={() => {
+                        addFavorites();
+                    }}
+                ></Button>
+                <Text style={styles.fav}>{messageFav}</Text>
             </View>
         </SafeAreaView>
     );
@@ -60,5 +82,6 @@ const ProductScreen = () => {
 export default ProductScreen;
 
 const styles = StyleSheet.create({
-    productImage: { height: 160, width: 100 },
+    productImage: { height: 260, width: 200 },
+    fav: { color: "red" },
 });

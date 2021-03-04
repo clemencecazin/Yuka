@@ -22,7 +22,7 @@ const ProductScreen = ({ productData, navigation }) => {
     // console.log(productData);
     useEffect(() => {
         const fetchData = async () => {
-            console.log(listing);
+            // console.log(listing);
             try {
                 const response = await axios.get(
                     `https://world.openfoodfacts.org/api/v0/product/${productData}`
@@ -42,7 +42,7 @@ const ProductScreen = ({ productData, navigation }) => {
                     setListing(newProduct);
                 }
 
-                console.log(listing);
+                // console.log(listing);
             } catch (error) {
                 console.log(error.response);
             }

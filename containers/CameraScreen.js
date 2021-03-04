@@ -11,7 +11,13 @@ import { useNavigation } from "@react-navigation/core";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useEffect, useState } from "react";
 import { TouchableHighlight } from "react-native-gesture-handler";
-import { Redirect } from "react-router-dom"; //rappel
+import {
+    NativeRouter,
+    Route,
+    Link,
+    Redirect,
+    withRouter,
+} from "react-router-native";
 
 // Envoi données produit scanné vers app.js
 

@@ -50,8 +50,9 @@ const ProductScreen = ({ setFavorite }) => {
         setMessageFav("Produits ajouté en favoris");
         setFavorite(
             JSON.stringify({
-                name: "Farid",
-                age: "32",
+                name: name,
+                picture: picture,
+                brand: brand,
             })
         );
     };

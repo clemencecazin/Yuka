@@ -1,14 +1,26 @@
 import React from "react";
-import { View, Text, Button, SafeAreaView } from "react-native";
+import {
+    View,
+    Text,
+    Button,
+    SafeAreaView,
+    StyleSheet,
+    Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/core";
+import { useState, useEffect } from "react/cjs/react.development";
 
 // Reçoit donnée du produit ajouté en favoris
 
 // Produit renvoi vers la fiche
-
 const FavoritesScreen = ({ productFavorite }) => {
-    const nav = useNavigation();
-    console.log(productFavorite.name);
+    console.log(productFavorite);
+    const [allFavorite, setAllFavorite] = useState();
+    // const brand = productFavorite.brand;
+    // let tab = [];
+    // tab.push(productFavorite);
+    // console.log(tab[0].name);
+
     return (
         <SafeAreaView>
             {/* <Button
@@ -17,8 +29,17 @@ const FavoritesScreen = ({ productFavorite }) => {
                     nav.navigate("Product");
                 }}
             /> */}
-            <Text>{productFavorite.name}</Text>
+            <Text>{productFavorite.brand}</Text>
+            <Image
+                source={{ uri: productFavorite.picture }}
+                style={styles.productImage}
+                resizeMode="contain"
+            />
         </SafeAreaView>
     );
 };
 export default FavoritesScreen;
+
+const styles = StyleSheet.create({
+    productImage: { height: 260, width: 200 },
+});

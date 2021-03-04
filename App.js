@@ -48,8 +48,10 @@ export default function App() {
                 "productFavorite"
             );
 
-            setProductData(productData);
-            setProductFavorite(productFavorite);
+            const productFavObj = JSON.parse(productFavorite);
+
+            setProductData(productData); // Récupére et Stock la data du code barre pour l'envoyer dans l'historique
+            setProductFavorite(productFavObj); // Récupére et Stock l'objet pour l'envoyer dans la page favoris
         };
         // console.log(productData);
 

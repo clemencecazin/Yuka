@@ -3,6 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
+
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import {
@@ -44,19 +46,36 @@ export default function App() {
     useEffect(() => {
         const bootstrapAsync = async () => {
             const productData = await AsyncStorage.getItem("productData");
-            const productFavorite = await AsyncStorage.getItem(
-                "productFavorite"
-            );
+            // const productFavorite = await AsyncStorage.getItem(
+            //     "productFavorite"
+            // );
 
-            const productFavObj = JSON.parse(productFavorite);
+            // const productFavObj = JSON.parse(productFavorite);
 
             setProductData(productData); // Récupére et Stock la data du code barre pour l'envoyer dans l'historique
-            setProductFavorite(productFavObj); // Récupére et Stock l'objet pour l'envoyer dans la page favoris
+            // setProductFavorite(productFavObj); // Récupére et Stock l'objet pour l'envoyer dans la page favoris
         };
         // console.log(productData);
 
         bootstrapAsync();
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const bootstrapAsync = async () => {
+                try {
+                    const productFavorite = await AsyncStorage.getItem(
+                        "productFavorite"
+                    );
+                    const productFavObj = JSON.parse(productFavorite);
+                    setProductFavorite(productFavObj); // Récupére et Stock l'objet pour l'envoyer dans la page favoris
+                } catch (e) {
+                    console.log(error.response);
+                }
+            };
+            bootstrapAsync();
+        }, [productFavorite])
+    );
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -201,7 +220,7 @@ export default function App() {
                                 <Tab.Screen
                                     name="FavoritesTab"
                                     options={{
-                                        tabBarLabel: "Favorites",
+                                        tabBarLabel: "Favoris",
                                         tabBarIcon: ({ color, size }) => (
                                             <Entypo
                                                 name="star"

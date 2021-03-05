@@ -29,12 +29,12 @@ const FavoritesScreen = ({ productFavorite }) => {
                     nav.navigate("Product");
                 }}
             /> */}
-            <Text>{productFavorite.brand}</Text>
+            {/* <Text>{productFavorite.brand}</Text>
             <Image
                 source={{ uri: productFavorite.picture }}
                 style={styles.productImage}
                 resizeMode="contain"
-            />
+            /> */}
         </SafeAreaView>
     );
 };

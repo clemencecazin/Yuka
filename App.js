@@ -36,12 +36,6 @@ export default function App() {
         setProductData(infos);
     };
 
-    const setFavorite = async (value) => {
-        AsyncStorage.setItem("productFavorite", value);
-        setProductFavorite(value);
-        console.log(value);
-    };
-
     // Récupération de la data
     useEffect(() => {
         const bootstrapAsync = async () => {
@@ -59,23 +53,6 @@ export default function App() {
 
         bootstrapAsync();
     }, []);
-
-    useFocusEffect(
-        React.useCallback(() => {
-            const bootstrapAsync = async () => {
-                try {
-                    const productFavorite = await AsyncStorage.getItem(
-                        "productFavorite"
-                    );
-                    const productFavObj = JSON.parse(productFavorite);
-                    setProductFavorite(productFavObj); // Récupére et Stock l'objet pour l'envoyer dans la page favoris
-                } catch (e) {
-                    console.log(error.response);
-                }
-            };
-            bootstrapAsync();
-        }, [productFavorite])
-    );
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -154,13 +131,7 @@ export default function App() {
                                                     title: "Product",
                                                 }}
                                             >
-                                                {() => (
-                                                    <ProductScreen
-                                                        setFavorite={
-                                                            setFavorite
-                                                        }
-                                                    />
-                                                )}
+                                                {() => <ProductScreen />}
                                             </Stack.Screen>
                                         </Stack.Navigator>
                                     )}
@@ -203,13 +174,7 @@ export default function App() {
                                                     title: "Product",
                                                 }}
                                             >
-                                                {() => (
-                                                    <ProductScreen
-                                                        setFavorite={
-                                                            setFavorite
-                                                        }
-                                                    />
-                                                )}
+                                                {() => <ProductScreen />}
                                             </Stack.Screen>
                                         </Stack.Navigator>
                                     )}

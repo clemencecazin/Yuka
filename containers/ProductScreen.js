@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/core";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const axios = require("axios");
 
@@ -46,16 +47,29 @@ const ProductScreen = ({ setFavorite }) => {
         fetchData();
     }, []);
 
-    const addFavorites = () => {
-        setMessageFav("Produits ajouté en favoris");
-        setFavorite(
-            JSON.stringify({
-                name: name,
-                picture: picture,
-                brand: brand,
-            })
+    const addFavorites = async () => {
+        const value = JSON.stringify({
+            name: name,
+            picture: picture,
+            brand: brand,
+        });
+        const productFavorite = await AsyncStorage.setItem(
+            "productFavorite",
+            value
         );
+        setMessageFav("Produits ajouté en favoris");
     };
+
+    // const addFavorites = () => {
+    //     setMessageFav("Produits ajouté en favoris");
+    //     setFavorite(
+    //         JSON.stringify({
+    //             name: name,
+    //             picture: picture,
+    //             brand: brand,
+    //         })
+    //     );
+    // };
 
     return (
         <SafeAreaView>

@@ -6,6 +6,9 @@ import {
     SafeAreaView,
     Image,
     StyleSheet,
+    ActivityIndicator,
+    FlatList,
+    ScrollView,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/core";
@@ -23,6 +26,8 @@ const ProductScreen = ({ setFavorite }) => {
     const [brand, setBrand] = useState();
     const [productObj, setProductObj] = useState();
     const [messageFav, setMessageFav] = useState("");
+    const [detailsProduct, setdetailsProduct] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const { params } = useRoute();
     // const id = route.params.data;
@@ -37,9 +42,36 @@ const ProductScreen = ({ setFavorite }) => {
 
                 // Rendu du produit
 
-                setName(response.data.product.product_name);
-                setPicture(response.data.product.image_front_small_url);
-                setBrand(response.data.product.brands);
+                // setName(response.data.product.product_name);
+                // setPicture(response.data.product.image_front_small_url);
+                // setBrand(response.data.product.brands);
+
+                detailsProduct.push({
+                    name: response.data.product.product_name,
+                    picture: response.data.product.image_front_small_url,
+                    brand: response.data.product.brands,
+                    ecoscore: response.data.product.ecoscore_grade,
+                    nutriscore: response.data.product.nutriscore_grade,
+                    ingredient: response.data.product.ingredients,
+                    nutrition: response.data.product.nutrient_levels,
+                });
+
+                // (detailsProduct.name = response.data.product.product_name),
+                //     (detailsProduct.picture =
+                //         response.data.product.image_front_small_url),
+                //     (detailsProduct.brand = response.data.product.brands),
+                //     (detailsProduct.ecoscore =
+                //         response.data.product.ecoscore_grade),
+                //     (detailsProduct.nutriscore =
+                //         response.data.product.nutriscore_grade),
+                //     (detailsProduct.ingredient =
+                //         response.data.product.ingredients),
+                //     (detailsProduct.nutrition =
+                //         response.data.product.nutrient_levels);
+
+                setIsLoading(false);
+
+                console.log(detailsProduct[0].ingredient[1].text);
             } catch (error) {
                 console.log(error.response);
             }
@@ -71,26 +103,51 @@ const ProductScreen = ({ setFavorite }) => {
     //     );
     // };
 
-    return (
+    return isLoading ? (
+        <ActivityIndicator size="large" color="black" />
+    ) : (
         <SafeAreaView>
-            <Text>data : {params.data}</Text>
+            <ScrollView>
+                {/* <Text>data : {params.data}</Text> */}
 
-            <View>
-                <Image
-                    source={{ uri: picture }}
-                    style={styles.productImage}
-                    resizeMode="contain"
-                />
-                <Text>{name}</Text>
-                <Text>{brand}</Text>
-                <Button
-                    title="Add to favorites"
-                    onPress={() => {
-                        addFavorites();
-                    }}
-                ></Button>
-                <Text style={styles.fav}>{messageFav}</Text>
-            </View>
+                <View>
+                    <Image
+                        source={{ uri: detailsProduct[0].picture }}
+                        style={styles.productImage}
+                        resizeMode="contain"
+                    />
+                    <Text>{detailsProduct[0].name}</Text>
+                    <Text>{detailsProduct[0].brand}</Text>
+                    <Text>{detailsProduct[0].ecoscore}</Text>
+                    <Text>{detailsProduct[0].nutriscore}</Text>
+                    <Text>Surgar : {detailsProduct[0].nutrition.sugars}</Text>
+                    <Text>Surgar : {detailsProduct[0].nutrition.salts}</Text>
+                    <Text>Fat : {detailsProduct[0].nutrition.fat}</Text>
+
+                    <Button
+                        title="Add to favorites"
+                        onPress={() => {
+                            addFavorites();
+                        }}
+                    ></Button>
+                    <Text style={styles.fav}>{messageFav}</Text>
+
+                    <View>
+                        <Text>Ingrédient</Text>
+                        <Text>
+                            {/* {detailsProduct[0].ingredient[0].data.text} */}
+                        </Text>
+
+                        <FlatList
+                            data={detailsProduct[0].ingredient}
+                            renderItem={({ item }) => {
+                                return <Text>{item.text}</Text>;
+                            }}
+                            // keyExtractor={(item) => item}
+                        />
+                    </View>
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };

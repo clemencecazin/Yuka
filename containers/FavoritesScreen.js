@@ -10,11 +10,12 @@ import {
 import { useNavigation } from "@react-navigation/core";
 import { useState, useEffect } from "react/cjs/react.development";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 // Reçoit donnée du produit ajouté en favoris
 
 // Produit renvoi vers la fiche
-const FavoritesScreen = () => {
+const FavoritesScreen = ({ navigation }) => {
     // console.log(productFavorite);
     const [allFavorite, setAllFavorite] = useState();
     const [productFavorite, setProductFavorite] = useState();
@@ -26,19 +27,21 @@ const FavoritesScreen = () => {
     // console.log(tab[0].name);
 
     // Récupération de la data
-    useEffect(() => {
-        const bootstrapAsync = async () => {
-            const productFavorite = await AsyncStorage.getItem(
-                "productFavorite"
-            );
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         const productFavorite = await AsyncStorage.getItem(
+    //             "productFavorite"
+    //         );
 
-            const productFavObj = JSON.parse(productFavorite);
+    //         const productFavObj = JSON.parse(productFavorite);
+    //         setProductFavorite(productFavObj); // Récupére et Stock l'objet pour l'envoyer dans la page Favoris
+    //     });
+    //     console.log(productFavorite);
 
-            setProductFavorite(productFavObj); // Récupére et Stock l'objet pour l'envoyer dans la page favoris
-        };
-        console.log(productFavorite);
-        bootstrapAsync();
-    }, []);
+    //     // setProduct(productFavorite.brand);
+    //     bootstrapAsync();
+    //     return unsubscribe;
+    // }, [navigation]);
     // console.log(productFavorite);
 
     return (
@@ -49,12 +52,12 @@ const FavoritesScreen = () => {
                     nav.navigate("Product");
                 }}
             /> */}
-            <Text>{productFavorite.brand}</Text>
-            <Image
+            {/* <Text>{product}</Text> */}
+            {/* <Image
                 source={{ uri: productFavorite.picture }}
                 style={styles.productImage}
                 resizeMode="contain"
-            />
+            /> */}
         </SafeAreaView>
     );
 };

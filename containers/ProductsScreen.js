@@ -10,6 +10,8 @@ import {
 import { useNavigation } from "@react-navigation/core";
 import { useState, useEffect } from "react";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { MaterialIcons } from "@expo/vector-icons";
+
 const axios = require("axios");
 
 // ProductScreen reçoit les details du produits et ajoute tableau de produits
@@ -18,6 +20,7 @@ const axios = require("axios");
 
 const ProductScreen = ({ productData, navigation }) => {
     const [listing, setListing] = useState([]);
+    const [nutriscore, setNutriscore] = useState();
 
     // console.log(productData);
     useEffect(() => {
@@ -38,10 +41,58 @@ const ProductScreen = ({ productData, navigation }) => {
                         name: response.data.product.product_name,
                         image: response.data.product.image_front_small_url,
                         brand: response.data.product.brands,
+                        nutriscore: response.data.product.nutriscore_grade,
                     });
                     setListing(newProduct);
                 }
 
+                setNutriscore(response.data.product.nutriscore_grade);
+
+                // console.log(nutriscore);
+                for (i = 0; i < listing.length; i++) {
+                    console.log(listing[i]);
+                    if (listing[i].nutriscore === "a") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_a.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            ></Image>
+                        );
+                    } else if (listing[i].nutriscore === "b") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_b.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            ></Image>
+                        );
+                    } else if (listing[i].nutriscore === "c") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_c.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            ></Image>
+                        );
+                    } else if (listing[i].nutriscore === "d") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_c.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            ></Image>
+                        );
+                    } else if (listing[i].nutriscore === "e") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_e.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            ></Image>
+                        );
+                    }
+                }
                 // console.log(listing);
             } catch (error) {
                 console.log(error.response);
@@ -51,7 +102,7 @@ const ProductScreen = ({ productData, navigation }) => {
     }, [productData]);
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.bg}>
             {listing === [] ? (
                 <Text>Nothing yet</Text>
             ) : (
@@ -61,20 +112,47 @@ const ProductScreen = ({ productData, navigation }) => {
                         return (
                             <TouchableOpacity
                                 onPress={() => {
-                                    navigation.push(
+                                    navigation.navigate(
                                         "Product",
                                         { data: item.code }
                                         // Navigation vers Product avec la data à passer en param dans la fiche produit
                                     );
                                 }}
                             >
-                                <Image
-                                    source={{ uri: item.image }}
-                                    style={styles.productImage}
-                                    resizeMode="contain"
-                                />
-                                <Text>{item.name}</Text>
-                                <Text>{item.brand}</Text>
+                                <View style={styles.containerProduct}>
+                                    <Image
+                                        source={{ uri: item.image }}
+                                        style={styles.productImage}
+                                        resizeMode="contain"
+                                    />
+                                    <View style={styles.descProduct}>
+                                        <Text
+                                            style={styles.name}
+                                            numberOfLines={2}
+                                        >
+                                            {item.name}
+                                        </Text>
+                                        <Text style={styles.brand}>
+                                            {item.brand}
+                                        </Text>
+                                        <View style={styles.nutriscore}>
+                                            <Text>{item.nutriscore} </Text>
+                                            <Text>{nutriscore}</Text>
+                                            {/* <Image
+                                                source={require("../assets/nutriscore_a.png")}
+                                                style={styles.productImage}
+                                                resizeMode="contain"
+                                            ></Image> */}
+                                        </View>
+                                    </View>
+                                    <View style={styles.arrow}>
+                                        <MaterialIcons
+                                            name="keyboard-arrow-right"
+                                            size={34}
+                                            color="black"
+                                        />
+                                    </View>
+                                </View>
                             </TouchableOpacity>
                         );
                     }}
@@ -107,5 +185,23 @@ const ProductScreen = ({ productData, navigation }) => {
 export default ProductScreen;
 
 const styles = StyleSheet.create({
-    productImage: { height: 260, width: 200 },
+    bg: {
+        backgroundColor: "white",
+        flex: 1,
+    },
+    productImage: { height: 150, width: 120 },
+    containerProduct: {
+        flexDirection: "row",
+        borderTopColor: "lightgrey",
+        borderTopWidth: 1,
+        marginLeft: 20,
+        marginVertical: 10,
+        height: 180,
+        width: "100%",
+    },
+    descProduct: { flexDirection: "column", padding: 10, width: 200 },
+    brand: { fontSize: 12, paddingVertical: 10, color: "grey" },
+    name: { fontWeight: "bold", marginTop: 20 },
+    arrow: { justifyContent: "center" },
+    nustriscore: { width: 100, height: 100 },
 });

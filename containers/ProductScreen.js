@@ -28,6 +28,7 @@ const ProductScreen = ({ setFavorite }) => {
     const [messageFav, setMessageFav] = useState("");
     const [detailsProduct, setdetailsProduct] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [listing, setListing] = useState([]);
 
     const { params } = useRoute();
     // const id = route.params.data;
@@ -54,8 +55,8 @@ const ProductScreen = ({ setFavorite }) => {
                     nutriscore: response.data.product.nutriscore_grade,
                     ingredient: response.data.product.ingredients,
                     nutrition: response.data.product.nutrient_levels,
+                    code: response.data.product.code,
                 });
-
                 // (detailsProduct.name = response.data.product.product_name),
                 //     (detailsProduct.picture =
                 //         response.data.product.image_front_small_url),
@@ -68,10 +69,9 @@ const ProductScreen = ({ setFavorite }) => {
                 //         response.data.product.ingredients),
                 //     (detailsProduct.nutrition =
                 //         response.data.product.nutrient_levels);
-
                 setIsLoading(false);
 
-                console.log(detailsProduct[0].ingredient[1].text);
+                // console.log(detailsProduct);
             } catch (error) {
                 console.log(error.response);
             }
@@ -80,15 +80,26 @@ const ProductScreen = ({ setFavorite }) => {
     }, []);
 
     const addFavorites = async () => {
-        const value = JSON.stringify({
-            name: name,
-            picture: picture,
-            brand: brand,
-        });
+        console.log(detailsProduct);
+        const newProduct = [...detailsProduct];
+
+        // setdetailsProduct(newProduct);
+        console.log("newProduct");
+        console.log(newProduct);
+
+        const value = JSON.stringify(newProduct);
+        console.log(1);
+        console.log(value);
         const productFavorite = await AsyncStorage.setItem(
             "productFavorite",
             value
         );
+
+        console.log(2);
+
+        console.log(productFavorite);
+        // console.log(newProduct);
+
         setMessageFav("Produits ajouté en favoris");
     };
 
@@ -106,23 +117,40 @@ const ProductScreen = ({ setFavorite }) => {
     return isLoading ? (
         <ActivityIndicator size="large" color="black" />
     ) : (
-        <SafeAreaView>
+        <SafeAreaView style={styles.bg}>
             <ScrollView>
                 {/* <Text>data : {params.data}</Text> */}
-
-                <View>
-                    <Image
-                        source={{ uri: detailsProduct[0].picture }}
-                        style={styles.productImage}
-                        resizeMode="contain"
-                    />
-                    <Text>{detailsProduct[0].name}</Text>
-                    <Text>{detailsProduct[0].brand}</Text>
+                <View style={styles.container}>
+                    <View style={styles.containerProduct}>
+                        <Image
+                            source={{ uri: detailsProduct[0].picture }}
+                            style={styles.productImage}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.descProduct}>
+                            <Text style={styles.name}>
+                                {detailsProduct[0].name}
+                            </Text>
+                            <Text style={styles.brand}>
+                                {detailsProduct[0].brand}
+                            </Text>
+                            <Text>{detailsProduct[0].nutriscore}</Text>
+                        </View>
+                    </View>
                     <Text>{detailsProduct[0].ecoscore}</Text>
-                    <Text>{detailsProduct[0].nutriscore}</Text>
-                    <Text>Surgar : {detailsProduct[0].nutrition.sugars}</Text>
-                    <Text>Surgar : {detailsProduct[0].nutrition.salts}</Text>
-                    <Text>Fat : {detailsProduct[0].nutrition.fat}</Text>
+
+                    {/* Nutriments */}
+                    <Text style={styles.title}>Nutriments</Text>
+
+                    <Text style={styles.details}>
+                        Surgar : {detailsProduct[0].nutrition.sugars}
+                    </Text>
+                    <Text style={styles.details}>
+                        Surgar : {detailsProduct[0].nutrition.salts}
+                    </Text>
+                    <Text style={styles.details}>
+                        Fat : {detailsProduct[0].nutrition.fat}
+                    </Text>
 
                     <Button
                         title="Add to favorites"
@@ -133,18 +161,29 @@ const ProductScreen = ({ setFavorite }) => {
                     <Text style={styles.fav}>{messageFav}</Text>
 
                     <View>
-                        <Text>Ingrédient</Text>
+                        <Text style={styles.title}>Ingrédient</Text>
                         <Text>
                             {/* {detailsProduct[0].ingredient[0].data.text} */}
                         </Text>
 
-                        <FlatList
+                        {detailsProduct[0].ingredient.map((product, index) => {
+                            return (
+                                <View key={product.code}>
+                                    <Text>{product.text}</Text>
+                                </View>
+                            );
+                        })}
+                        {/* <FlatList
                             data={detailsProduct[0].ingredient}
                             renderItem={({ item }) => {
-                                return <Text>{item.text}</Text>;
+                                return (
+                                    <Text style={styles.details}>
+                                        {item.text}
+                                    </Text>
+                                );
                             }}
-                            // keyExtractor={(item) => item}
-                        />
+                            keyExtractor={(item) => item.id}
+                        /> */}
                     </View>
                 </View>
             </ScrollView>
@@ -154,6 +193,30 @@ const ProductScreen = ({ setFavorite }) => {
 export default ProductScreen;
 
 const styles = StyleSheet.create({
-    productImage: { height: 260, width: 200 },
+    bg: {
+        flex: 1,
+        backgroundColor: "white",
+    },
+    container: {
+        marginHorizontal: 20,
+    },
+    productImage: { height: 160, width: 130 },
     fav: { color: "red" },
+    containerProduct: {
+        flexDirection: "row",
+
+        marginHorizontal: 20,
+        marginVertical: 10,
+        height: 130,
+        width: "100%",
+    },
+    descProduct: {
+        flexDirection: "column",
+        padding: 10,
+        width: 200,
+    },
+    brand: { fontSize: 12, paddingVertical: 10, color: "grey" },
+    name: { fontWeight: "bold", marginTop: 20 },
+    title: { fontSize: 24, fontWeight: "bold" },
+    details: { fontSize: 16, padding: 10 },
 });

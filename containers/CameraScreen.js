@@ -18,6 +18,7 @@ import {
     Redirect,
     withRouter,
 } from "react-router-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Envoi données produit scanné vers app.js
 
@@ -29,6 +30,8 @@ const CameraScreen = ({ setInfos }) => {
     const [scanned, setScanned] = useState(false);
     const [data, setData] = useState(null);
     const [messageProduct, setMessageProduct] = useState("");
+    const [productData, setProductData] = useState(null);
+    const [tab, setTab] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -56,9 +59,24 @@ const CameraScreen = ({ setInfos }) => {
         setData(data);
 
         // Info apporté à App.js
-        setInfos(data);
+        // setInfos(data);
 
-        // console.log(data);
+        // J'enregistre le nouveau code à chaque fois que je scanne un produit
+        // const newTab = [...tab];
+        // newTab.push(data);
+        // console.log(newTab);
+
+        // setTab(newTab);
+
+        // Je l'envoi dans l'asyncStorage
+
+        // AsyncStorage.setItem("productData", data);
+
+        // setProductData(data);
+
+        // console.log(setData);
+
+        setInfos(data);
     };
 
     if (hasPermission === null) {

@@ -40,14 +40,8 @@ export default function App() {
     useEffect(() => {
         const bootstrapAsync = async () => {
             const productData = await AsyncStorage.getItem("productData");
-            // const productFavorite = await AsyncStorage.getItem(
-            //     "productFavorite"
-            // );
-
-            // const productFavObj = JSON.parse(productFavorite);
 
             setProductData(productData); // Récupére et Stock la data du code barre pour l'envoyer dans l'historique
-            // setProductFavorite(productFavObj); // Récupére et Stock l'objet pour l'envoyer dans la page favoris
         };
         // console.log(productData);
 

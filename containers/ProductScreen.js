@@ -9,6 +9,7 @@ import {
     ActivityIndicator,
     FlatList,
     ScrollView,
+    TouchableNativeFeedback,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/core";
@@ -80,39 +81,63 @@ const ProductScreen = ({ setFavorite }) => {
     }, []);
 
     const addFavorites = async () => {
+        // AsyncStorage.clear();
+
+        console.log("1");
         console.log(detailsProduct);
-        const newProduct = [...detailsProduct];
+        // Récupère les données déjà présente ou non dans le tableau
+        const previousFavorites = await AsyncStorage.getItem("productFavorite");
+
+        // Si aucun produit encore scanné, ajout et sauvegarde du produit
+        if (previousFavorites === null) {
+            const value = JSON.stringify(detailsProduct);
+
+            await AsyncStorage.setItem("productFavorite", value);
+            console.log("2");
+            console.log(previousFavorites);
+            setMessageFav("Produits ajouté en favoris");
+        } else {
+            // Si déjà un produit de scanner, ajout et sauvegarde du nouveau produit
+            // Parse pour pouvoir ajouter le nouveau produit
+            const tabFavorites = JSON.parse(previousFavorites);
+            // console.log("tabFavorites");
+
+            // console.log(tabFavorites);
+
+            // Condition si le produit est déjà présent message d'alerte
+            let presentProduct = false;
+            for (let i = 0; i < tabFavorites.length; i++) {
+                // console.log(tabFavorites[i].code);
+                if (tabFavorites[i].code === detailsProduct[0].code) {
+                    presentProduct = true;
+                    setMessageFav("Le produit a déjà été scanné");
+                }
+            }
+
+            // Sinon ajout du produit
+            if (presentProduct === false) {
+                tabFavorites.push(detailsProduct[0]);
+                setMessageFav("Produits ajouté en favoris");
+            }
+
+            // Sauvegarde tous les produits ajoutés
+            const value = JSON.stringify(tabFavorites);
+            console.log("3");
+            console.log(value);
+            await AsyncStorage.setItem("productFavorite", value);
+        }
 
         // setdetailsProduct(newProduct);
-        console.log("newProduct");
-        console.log(newProduct);
-
-        const value = JSON.stringify(newProduct);
-        console.log(1);
-        console.log(value);
-        const productFavorite = await AsyncStorage.setItem(
-            "productFavorite",
-            value
-        );
-
-        console.log(2);
-
-        console.log(productFavorite);
+        // console.log("newProduct");
         // console.log(newProduct);
 
-        setMessageFav("Produits ajouté en favoris");
-    };
+        // const value = JSON.stringify(detailsProduct);
+        // console.log("3");
+        // console.log(value);
+        // await AsyncStorage.setItem("productFavorite", value);
 
-    // const addFavorites = () => {
-    //     setMessageFav("Produits ajouté en favoris");
-    //     setFavorite(
-    //         JSON.stringify({
-    //             name: name,
-    //             picture: picture,
-    //             brand: brand,
-    //         })
-    //     );
-    // };
+        // console.log(newProduct);
+    };
 
     return isLoading ? (
         <ActivityIndicator size="large" color="black" />

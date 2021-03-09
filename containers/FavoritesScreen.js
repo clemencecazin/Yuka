@@ -39,33 +39,21 @@ const FavoritesScreen = ({ navigation }) => {
             // Mettre ici la déclaration puis l'appel de `bootstrapAsync`
             const bootstrapAsync = async () => {
                 try {
-                    // Récupère mon objet
+                    // Récupère mon objet pour l'afficher
                     const productFavorite = await AsyncStorage.getItem(
                         "productFavorite"
                     );
-                    // console.log(3);
-                    // console.log(productFavorite);
-                    // Parse pour pouvoir push un nouveau produit
+                    console.log("4");
+                    console.log(productFavorite);
+
+                    // Parse pour le passer dans le state
                     const productFavObj = JSON.parse(productFavorite);
-                    // setProductFavorite(productFavObj);
                     // console.log(4);
                     // console.log(productFavObj);
 
-                    // Push chaque nouveau produit ajouté en favoris
-                    for (i = 0; i < productFavObj.length; i++) {
-                        if (listing.indexOf(productFavObj[i].code) === -1) {
-                            console.log(productFavObj[i].code);
-                            listing.push(productFavObj[i]);
-                            console.log(listing);
-                        }
-                    }
+                    setListing(productFavObj);
 
-                    // Stocke chaque nouveaux produits
-
-                    const value = JSON.stringify(listing);
-                    console.log(1);
-                    console.log(value);
-                    await AsyncStorage.setItem("productFavorite", value);
+                    // console.log(listing);
 
                     // setListing(null);
 
@@ -77,7 +65,7 @@ const FavoritesScreen = ({ navigation }) => {
             bootstrapAsync();
         });
 
-        return unsubscribe;
+        // return unsubscribe;
     }, [navigation]);
 
     // useEffect(() => {

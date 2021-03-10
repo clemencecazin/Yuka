@@ -49,51 +49,7 @@ const ProductScreen = ({ productData, navigation }) => {
                 setNutriscore(response.data.product.nutriscore_grade);
 
                 // console.log(nutriscore);
-                for (i = 0; i < listing.length; i++) {
-                    // setNutriscore(detailsProduct[i].nutriscore);
-                    console.log(nutriscore);
-                    if (listing[i].nutriscore === "a") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_a.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    } else if (listing[i].nutriscore === "b") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_b.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    } else if (listing[i].nutriscore === "c") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_c.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    } else if (listing[i].nutriscore === "d") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_d.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    } else if (listing[i].nutriscore === "e") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_e.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    }
-                }
+
                 // console.log(listing);
             } catch (error) {
                 console.log(error.response);

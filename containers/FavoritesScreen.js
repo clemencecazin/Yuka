@@ -21,11 +21,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 // Produit renvoi vers la fiche
 const FavoritesScreen = ({ navigation }) => {
     // console.log(productFavorite);
-    const [allFavorite, setAllFavorite] = useState();
-    const [productFavorite, setProductFavorite] = useState();
-    const [product, setProduct] = useState();
+
     const [isLoading, setIsLoading] = useState(true);
     const [listing, setListing] = useState([]);
+    const [nutriscore, setNutriscore] = useState();
 
     // const brand = productFavorite.brand;
     // let tab = [];
@@ -43,8 +42,8 @@ const FavoritesScreen = ({ navigation }) => {
                     const productFavorite = await AsyncStorage.getItem(
                         "productFavorite"
                     );
-                    console.log("4");
-                    console.log(productFavorite);
+                    // console.log("4");
+                    // console.log(productFavorite);
 
                     // Parse pour le passer dans le state
                     const productFavObj = JSON.parse(productFavorite);
@@ -57,6 +56,51 @@ const FavoritesScreen = ({ navigation }) => {
 
                     // setListing(null);
 
+                    for (i = 0; i < listing.length; i++) {
+                        // setNutriscore(detailsProduct[i].nutriscore);
+                        console.log(nutriscore);
+                        if (listing[i].nutriscore === "a") {
+                            setNutriscore(
+                                <Image
+                                    source={require("../assets/nutriscore_a.png")}
+                                    style={styles.productImage}
+                                    resizeMode="contain"
+                                />
+                            );
+                        } else if (listing[i].nutriscore === "b") {
+                            setNutriscore(
+                                <Image
+                                    source={require("../assets/nutriscore_b.png")}
+                                    style={styles.productImage}
+                                    resizeMode="contain"
+                                />
+                            );
+                        } else if (listing[i].nutriscore === "c") {
+                            setNutriscore(
+                                <Image
+                                    source={require("../assets/nutriscore_c.png")}
+                                    style={styles.productImage}
+                                    resizeMode="contain"
+                                />
+                            );
+                        } else if (listing[i].nutriscore === "d") {
+                            setNutriscore(
+                                <Image
+                                    source={require("../assets/nutriscore_d.png")}
+                                    style={styles.productImage}
+                                    resizeMode="contain"
+                                />
+                            );
+                        } else if (listing[i].nutriscore === "e") {
+                            setNutriscore(
+                                <Image
+                                    source={require("../assets/nutriscore_e.png")}
+                                    style={styles.productImage}
+                                    resizeMode="contain"
+                                />
+                            );
+                        }
+                    }
                     setIsLoading(false);
                 } catch (error) {
                     console.log(error.response);
@@ -113,6 +157,8 @@ const FavoritesScreen = ({ navigation }) => {
                                     <Text style={styles.brand}>
                                         {item.brand}
                                     </Text>
+                                    <Text>{nutriscore}</Text>
+
                                     {/* <View style={styles.nutriscore}> */}
                                     {/* {item.nutriscore} */}
                                     {/* <Text>{nutriscore}</Text> */}

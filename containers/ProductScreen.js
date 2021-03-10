@@ -21,15 +21,11 @@ const axios = require("axios");
 
 // Possibilité d'ajouter en favoris -> envoi
 
-const ProductScreen = ({ setFavorite }) => {
-    const [name, setName] = useState();
-    const [picture, setPicture] = useState();
-    const [brand, setBrand] = useState();
-    const [productObj, setProductObj] = useState();
+const ProductScreen = () => {
     const [messageFav, setMessageFav] = useState("");
     const [detailsProduct, setdetailsProduct] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [listing, setListing] = useState([]);
+    const [nutriscore, setNutriscore] = useState();
 
     const { params } = useRoute();
     // const id = route.params.data;
@@ -70,7 +66,54 @@ const ProductScreen = ({ setFavorite }) => {
                 //         response.data.product.ingredients),
                 //     (detailsProduct.nutrition =
                 //         response.data.product.nutrient_levels);
+
                 setIsLoading(false);
+
+                for (i = 0; i < detailsProduct.length; i++) {
+                    // setNutriscore(detailsProduct[i].nutriscore);
+                    console.log(nutriscore);
+                    if (detailsProduct[i].nutriscore === "a") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_a.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            />
+                        );
+                    } else if (detailsProduct[i].nutriscore === "b") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_b.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            />
+                        );
+                    } else if (detailsProduct[i].nutriscore === "c") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_c.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            />
+                        );
+                    } else if (detailsProduct[i].nutriscore === "d") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_d.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            />
+                        );
+                    } else if (detailsProduct[i].nutriscore === "e") {
+                        setNutriscore(
+                            <Image
+                                source={require("../assets/nutriscore_e.png")}
+                                style={styles.productImage}
+                                resizeMode="contain"
+                            />
+                        );
+                    }
+                }
 
                 // console.log(detailsProduct);
             } catch (error) {
@@ -83,8 +126,8 @@ const ProductScreen = ({ setFavorite }) => {
     const addFavorites = async () => {
         // AsyncStorage.clear();
 
-        console.log("1");
-        console.log(detailsProduct);
+        // console.log("1");
+        // console.log(detailsProduct);
         // Récupère les données déjà présente ou non dans le tableau
         const previousFavorites = await AsyncStorage.getItem("productFavorite");
 
@@ -93,11 +136,11 @@ const ProductScreen = ({ setFavorite }) => {
             const value = JSON.stringify(detailsProduct);
 
             await AsyncStorage.setItem("productFavorite", value);
-            console.log("2");
-            console.log(previousFavorites);
+            // console.log("2");
+            // console.log(previousFavorites);
             setMessageFav("Produits ajouté en favoris");
         } else {
-            // Si déjà un produit de scanner, ajout et sauvegarde du nouveau produit
+            // Si déjà un produit de scanné, ajout et sauvegarde du nouveau produit
             // Parse pour pouvoir ajouter le nouveau produit
             const tabFavorites = JSON.parse(previousFavorites);
             // console.log("tabFavorites");
@@ -122,21 +165,10 @@ const ProductScreen = ({ setFavorite }) => {
 
             // Sauvegarde tous les produits ajoutés
             const value = JSON.stringify(tabFavorites);
-            console.log("3");
-            console.log(value);
+            // console.log("3");
+            // console.log(value);
             await AsyncStorage.setItem("productFavorite", value);
         }
-
-        // setdetailsProduct(newProduct);
-        // console.log("newProduct");
-        // console.log(newProduct);
-
-        // const value = JSON.stringify(detailsProduct);
-        // console.log("3");
-        // console.log(value);
-        // await AsyncStorage.setItem("productFavorite", value);
-
-        // console.log(newProduct);
     };
 
     return isLoading ? (
@@ -159,7 +191,7 @@ const ProductScreen = ({ setFavorite }) => {
                             <Text style={styles.brand}>
                                 {detailsProduct[0].brand}
                             </Text>
-                            <Text>{detailsProduct[0].nutriscore}</Text>
+                            <Text>{nutriscore}</Text>
                         </View>
                     </View>
                     <Text>{detailsProduct[0].ecoscore}</Text>
@@ -176,7 +208,6 @@ const ProductScreen = ({ setFavorite }) => {
                     <Text style={styles.details}>
                         Fat : {detailsProduct[0].nutrition.fat}
                     </Text>
-
                     <Button
                         title="Add to favorites"
                         onPress={() => {

@@ -50,14 +50,15 @@ const ProductScreen = ({ productData, navigation }) => {
 
                 // console.log(nutriscore);
                 for (i = 0; i < listing.length; i++) {
-                    console.log(listing[i]);
+                    // setNutriscore(detailsProduct[i].nutriscore);
+                    console.log(nutriscore);
                     if (listing[i].nutriscore === "a") {
                         setNutriscore(
                             <Image
                                 source={require("../assets/nutriscore_a.png")}
                                 style={styles.productImage}
                                 resizeMode="contain"
-                            ></Image>
+                            />
                         );
                     } else if (listing[i].nutriscore === "b") {
                         setNutriscore(
@@ -65,7 +66,7 @@ const ProductScreen = ({ productData, navigation }) => {
                                 source={require("../assets/nutriscore_b.png")}
                                 style={styles.productImage}
                                 resizeMode="contain"
-                            ></Image>
+                            />
                         );
                     } else if (listing[i].nutriscore === "c") {
                         setNutriscore(
@@ -73,15 +74,15 @@ const ProductScreen = ({ productData, navigation }) => {
                                 source={require("../assets/nutriscore_c.png")}
                                 style={styles.productImage}
                                 resizeMode="contain"
-                            ></Image>
+                            />
                         );
                     } else if (listing[i].nutriscore === "d") {
                         setNutriscore(
                             <Image
-                                source={require("../assets/nutriscore_c.png")}
+                                source={require("../assets/nutriscore_d.png")}
                                 style={styles.productImage}
                                 resizeMode="contain"
-                            ></Image>
+                            />
                         );
                     } else if (listing[i].nutriscore === "e") {
                         setNutriscore(
@@ -89,7 +90,7 @@ const ProductScreen = ({ productData, navigation }) => {
                                 source={require("../assets/nutriscore_e.png")}
                                 style={styles.productImage}
                                 resizeMode="contain"
-                            ></Image>
+                            />
                         );
                     }
                 }

@@ -39,7 +39,7 @@ const ProductScreen = () => {
                 // console.log(response.data);
 
                 // Rendu du produit
-                detailsProduct.push({
+                objectToStore = {
                     name: response.data.product.product_name,
                     picture: response.data.product.image_front_small_url,
                     brand: response.data.product.brands,
@@ -48,10 +48,10 @@ const ProductScreen = () => {
                     ingredient: response.data.product.ingredients,
                     nutrition: response.data.product.nutrient_levels,
                     code: response.data.product.code,
-                });
+                };
 
                 console.log("Step 1");
-                console.log(detailsProduct);
+                console.log(objectToStore);
                 // Récupère les données déjà présente ou non dans le tableau
                 const previousData = await AsyncStorage.getItem("productData");
 
@@ -59,7 +59,7 @@ const ProductScreen = () => {
                 // AsyncStorage.clear();
                 // Si aucun produit encore scanné, ajout et sauvegarde du produit
                 if (previousData === null) {
-                    const value = JSON.stringify(detailsProduct);
+                    const value = JSON.stringify([objectToStore]);
 
                     await AsyncStorage.setItem("productData", value);
                     console.log("Step 2");
@@ -67,7 +67,7 @@ const ProductScreen = () => {
                 } else {
                     // Si déjà un produit de scanné, ajout et sauvegarde du nouveau produit
                     // Parse pour pouvoir ajouter le nouveau produit
-                    const tabData = JSON.parse(detailsProduct);
+                    const tabData = JSON.parse(previousData);
                     console.log("Step tabData");
 
                     console.log(tabData);
@@ -75,15 +75,15 @@ const ProductScreen = () => {
                     // Condition si le produit est déjà présent message d'alerte
                     let presentProduct = false;
                     for (let i = 0; i < tabData.length; i++) {
-                        console.log(detailsProduct[0].code);
-                        if (tabData[i].code === detailsProduct[0].code) {
+                        console.log(objectToStore.code);
+                        if (tabData[i].code === objectToStore.code) {
                             presentProduct = true;
                         }
                     }
 
                     // Sinon ajout du produit
                     if (presentProduct === false) {
-                        tabData.push(detailsProduct[0]);
+                        tabData.push(objectToStore);
                     }
 
                     // Sauvegarde tous les produits ajoutés
@@ -160,33 +160,33 @@ const ProductScreen = () => {
                 <View style={styles.container}>
                     <View style={styles.containerProduct}>
                         <Image
-                            source={{ uri: detailsProduct[0].picture }}
+                            source={{ uri: objectToStore.picture }}
                             style={styles.productImage}
                             resizeMode="contain"
                         />
                         <View style={styles.descProduct}>
                             <Text style={styles.name}>
-                                {detailsProduct[0].name}
+                                {objectToStore.name}
                             </Text>
                             <Text style={styles.brand}>
-                                {detailsProduct[0].brand}
+                                {objectToStore.brand}
                             </Text>
                             <Text>{nutriscore}</Text>
                         </View>
                     </View>
-                    <Text>{detailsProduct[0].ecoscore}</Text>
+                    <Text>{objectToStore.ecoscore}</Text>
 
                     {/* Nutriments */}
                     <Text style={styles.title}>Nutriments</Text>
 
                     <Text style={styles.details}>
-                        Surgar : {detailsProduct[0].nutrition.sugars}
+                        Surgar : {objectToStore.nutrition.sugars}
                     </Text>
                     <Text style={styles.details}>
-                        Surgar : {detailsProduct[0].nutrition.salts}
+                        Surgar : {objectToStore.nutrition.salts}
                     </Text>
                     <Text style={styles.details}>
-                        Fat : {detailsProduct[0].nutrition.fat}
+                        Fat : {objectToStore.nutrition.fat}
                     </Text>
                     <Button
                         title="Add to favorites"
@@ -202,7 +202,7 @@ const ProductScreen = () => {
                             {/* {detailsProduct[0].ingredient[0].data.text} */}
                         </Text>
 
-                        {detailsProduct[0].ingredient.map((product, index) => {
+                        {objectToStore.ingredient.map((product, index) => {
                             return (
                                 <View key={product.code}>
                                     <Text>{product.text}</Text>

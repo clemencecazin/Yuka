@@ -23,6 +23,8 @@ import ProductScreen from "./containers/ProductScreen";
 import FavoritesScreen from "./containers/FavoritesScreen";
 import { useEffect } from "react";
 
+// AsyncStorage.removeItem("productData");
+
 export default function App() {
     const [productData, setProductData] = useState(null);
     const [productFavorite, setProductFavorite] = useState();
@@ -109,7 +111,11 @@ export default function App() {
                                                     title: "Historique",
                                                 }}
                                             >
-                                                {() => <ProductsScreen />}
+                                                {(props) => (
+                                                    <ProductsScreen
+                                                        {...props}
+                                                    />
+                                                )}
                                             </Stack.Screen>
 
                                             <Stack.Screen
@@ -118,7 +124,9 @@ export default function App() {
                                                     title: "Product",
                                                 }}
                                             >
-                                                {() => <ProductScreen />}
+                                                {(props) => (
+                                                    <ProductScreen {...props} />
+                                                )}
                                             </Stack.Screen>
                                         </Stack.Navigator>
                                     )}

@@ -18,7 +18,6 @@ import {
     Redirect,
     withRouter,
 } from "react-router-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Envoi données produit scanné vers app.js
 

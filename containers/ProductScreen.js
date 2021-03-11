@@ -88,8 +88,8 @@ const ProductScreen = () => {
 
                     // Sauvegarde tous les produits ajoutés
                     const value = JSON.stringify(tabData);
-                    // console.log("3");
-                    // console.log(value);
+                    console.log("3");
+                    console.log(value);
                     await AsyncStorage.setItem("productData", value);
                 }
 
@@ -113,7 +113,7 @@ const ProductScreen = () => {
 
         // Si aucun produit encore scanné, ajout et sauvegarde du produit
         if (previousFavorites === null) {
-            const value = JSON.stringify(detailsProduct);
+            const value = JSON.stringify([objectToStore]);
 
             await AsyncStorage.setItem("productFavorite", value);
             // console.log("2");
@@ -131,7 +131,7 @@ const ProductScreen = () => {
             let presentProduct = false;
             for (let i = 0; i < tabFavorites.length; i++) {
                 // console.log(tabFavorites[i].code);
-                if (tabFavorites[i].code === detailsProduct[0].code) {
+                if (tabFavorites[i].code === objectToStore.code) {
                     presentProduct = true;
                     setMessageFav("Le produit a déjà été scanné");
                 }
@@ -139,7 +139,7 @@ const ProductScreen = () => {
 
             // Sinon ajout du produit
             if (presentProduct === false) {
-                tabFavorites.push(detailsProduct[0]);
+                tabFavorites.push(objectToStore);
                 setMessageFav("Produits ajouté en favoris");
             }
 

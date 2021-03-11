@@ -6,11 +6,14 @@ import {
     StyleSheet,
     SafeAreaView,
     Image,
+    ActivityIndicator,
+    TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useState, useEffect } from "react";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const axios = require("axios");
 
@@ -19,95 +22,96 @@ const axios = require("axios");
 // Produit renvoi vers la fiche
 
 const ProductsScreen = ({ navigation }) => {
-    const [listing, setListing] = useState([]);
-    const [nutriscore, setNutriscore] = useState();
+    const [listing, setListing] = useState();
+    const [isLoading, setIsLoading] = useState(true);
 
     // console.log(productData);
     useEffect(() => {
-        const fetchData = async () => {
-            // console.log(listing);
-            try {
-                const productData = await AsyncStorage.getItem("productData");
-                // console.log("4");
-                // console.log(productData);
-
-                // Parse pour le passer dans le state
-                const productDataTab = JSON.parse(productData);
-                // console.log(4);
-                // console.log(productDataTab);
-
-                setListing(productDataTab);
-
-                setNutriscore(response.data.product.nutriscore_grade);
-
-                // console.log(nutriscore);
-
+        const unsubscribe = navigation.addListener("focus", () => {
+            const fetchData = async () => {
                 // console.log(listing);
-            } catch (error) {
-                console.log(error.response);
-            }
-        };
-        fetchData();
-    }, []);
+                try {
+                    const productData = await AsyncStorage.getItem(
+                        "productData"
+                    );
+                    console.log("4");
+                    console.log(productData);
 
-    return (
+                    // Parse pour le passer dans le state
+                    const productDataTab = JSON.parse(productData);
+                    console.log(5);
+                    console.log(productDataTab);
+
+                    setListing(productDataTab);
+                    console.log(6);
+                    console.log(listing);
+
+                    // console.log(nutriscore);
+
+                    // console.log(listing);
+                    setIsLoading(false);
+                } catch (error) {
+                    console.log(error.response);
+                }
+            };
+            fetchData();
+        });
+    }, [navigation]);
+
+    return isLoading ? (
+        <ActivityIndicator size="large" color="black" />
+    ) : (
         <SafeAreaView style={styles.bg}>
-            {listing === null ? (
-                <Text>Nothing yet</Text>
-            ) : (
-                <FlatList
-                    data={listing}
-                    renderItem={({ item }) => {
-                        return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigation.navigate(
-                                        "Product",
-                                        { data: item.code }
-                                        // Navigation vers Product avec la data à passer en param dans la fiche produit
-                                    );
-                                }}
-                            >
-                                <View style={styles.containerProduct}>
-                                    <Image
-                                        source={{ uri: item.image }}
-                                        style={styles.productImage}
-                                        resizeMode="contain"
-                                    />
-                                    <View style={styles.descProduct}>
-                                        <Text
-                                            style={styles.name}
-                                            numberOfLines={2}
-                                        >
-                                            {item.name}
-                                        </Text>
-                                        <Text style={styles.brand}>
-                                            {item.brand}
-                                        </Text>
-                                        <View style={styles.nutriscore}>
-                                            <Text>{item.nutriscore} </Text>
-                                            <Text>{nutriscore}</Text>
-                                            {/* <Image
+            <FlatList
+                data={listing}
+                renderItem={({ item }) => {
+                    return (
+                        <TouchableOpacity
+                            onPress={() => {
+                                console.log("coucou");
+                                navigation.navigate(
+                                    "Product",
+                                    { data: item.code }
+                                    // Navigation vers Product avec la data à passer en param dans la fiche produit
+                                );
+                            }}
+                        >
+                            <View style={styles.containerProduct}>
+                                <Image
+                                    source={{ uri: item.picture }}
+                                    style={styles.productImage}
+                                    resizeMode="contain"
+                                />
+                                <View style={styles.descProduct}>
+                                    <Text style={styles.name} numberOfLines={2}>
+                                        {item.name}
+                                    </Text>
+                                    <Text style={styles.brand}>
+                                        {item.brand}
+                                    </Text>
+                                    <View style={styles.nutriscore}>
+                                        <Text>{item.nutriscore} </Text>
+                                        {/* <Text>{nutriscore}</Text> */}
+                                        {/* <Image
                                                 source={require("../assets/nutriscore_a.png")}
                                                 style={styles.productImage}
                                                 resizeMode="contain"
                                             ></Image> */}
-                                        </View>
-                                    </View>
-                                    <View style={styles.arrow}>
-                                        <MaterialIcons
-                                            name="keyboard-arrow-right"
-                                            size={34}
-                                            color="black"
-                                        />
                                     </View>
                                 </View>
-                            </TouchableOpacity>
-                        );
-                    }}
-                    keyExtractor={(item) => item.code}
-                />
-            )}
+                                <View style={styles.arrow}>
+                                    <MaterialIcons
+                                        name="keyboard-arrow-right"
+                                        size={34}
+                                        color="black"
+                                    />
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    );
+                }}
+                keyExtractor={(item) => item.code}
+            />
 
             {/* <Image source={{ uri: picture }} style={styles.productImage} />
                 <Text>{name}</Text>

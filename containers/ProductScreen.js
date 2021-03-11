@@ -39,11 +39,6 @@ const ProductScreen = () => {
                 // console.log(response.data);
 
                 // Rendu du produit
-
-                // setName(response.data.product.product_name);
-                // setPicture(response.data.product.image_front_small_url);
-                // setBrand(response.data.product.brands);
-
                 detailsProduct.push({
                     name: response.data.product.product_name,
                     picture: response.data.product.image_front_small_url,
@@ -54,66 +49,51 @@ const ProductScreen = () => {
                     nutrition: response.data.product.nutrient_levels,
                     code: response.data.product.code,
                 });
-                // (detailsProduct.name = response.data.product.product_name),
-                //     (detailsProduct.picture =
-                //         response.data.product.image_front_small_url),
-                //     (detailsProduct.brand = response.data.product.brands),
-                //     (detailsProduct.ecoscore =
-                //         response.data.product.ecoscore_grade),
-                //     (detailsProduct.nutriscore =
-                //         response.data.product.nutriscore_grade),
-                //     (detailsProduct.ingredient =
-                //         response.data.product.ingredients),
-                //     (detailsProduct.nutrition =
-                //         response.data.product.nutrient_levels);
+
+                console.log("Step 1");
+                console.log(detailsProduct);
+                // Récupère les données déjà présente ou non dans le tableau
+                const previousData = await AsyncStorage.getItem("productData");
+
+                // AsyncStorage pour dataProduct
+                // AsyncStorage.clear();
+                // Si aucun produit encore scanné, ajout et sauvegarde du produit
+                if (previousData === null) {
+                    const value = JSON.stringify(detailsProduct);
+
+                    await AsyncStorage.setItem("productData", value);
+                    console.log("Step 2");
+                    console.log(value);
+                } else {
+                    // Si déjà un produit de scanné, ajout et sauvegarde du nouveau produit
+                    // Parse pour pouvoir ajouter le nouveau produit
+                    const tabData = JSON.parse(detailsProduct);
+                    console.log("Step tabData");
+
+                    console.log(tabData);
+
+                    // Condition si le produit est déjà présent message d'alerte
+                    let presentProduct = false;
+                    for (let i = 0; i < tabData.length; i++) {
+                        console.log(detailsProduct[0].code);
+                        if (tabData[i].code === detailsProduct[0].code) {
+                            presentProduct = true;
+                        }
+                    }
+
+                    // Sinon ajout du produit
+                    if (presentProduct === false) {
+                        tabData.push(detailsProduct[0]);
+                    }
+
+                    // Sauvegarde tous les produits ajoutés
+                    const value = JSON.stringify(tabData);
+                    // console.log("3");
+                    // console.log(value);
+                    await AsyncStorage.setItem("productData", value);
+                }
 
                 setIsLoading(false);
-
-                for (i = 0; i < detailsProduct.length; i++) {
-                    // setNutriscore(detailsProduct[i].nutriscore);
-                    console.log(nutriscore);
-                    if (detailsProduct[i].nutriscore === "a") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_a.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    } else if (detailsProduct[i].nutriscore === "b") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_b.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    } else if (detailsProduct[i].nutriscore === "c") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_c.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    } else if (detailsProduct[i].nutriscore === "d") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_d.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    } else if (detailsProduct[i].nutriscore === "e") {
-                        setNutriscore(
-                            <Image
-                                source={require("../assets/nutriscore_e.png")}
-                                style={styles.productImage}
-                                resizeMode="contain"
-                            />
-                        );
-                    }
-                }
 
                 // console.log(detailsProduct);
             } catch (error) {

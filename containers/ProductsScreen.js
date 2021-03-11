@@ -18,7 +18,7 @@ const axios = require("axios");
 
 // Produit renvoi vers la fiche
 
-const ProductScreen = ({ productData, navigation }) => {
+const ProductsScreen = ({ navigation }) => {
     const [listing, setListing] = useState([]);
     const [nutriscore, setNutriscore] = useState();
 
@@ -27,24 +27,16 @@ const ProductScreen = ({ productData, navigation }) => {
         const fetchData = async () => {
             // console.log(listing);
             try {
-                const response = await axios.get(
-                    `https://world.openfoodfacts.org/api/v0/product/${productData}`
-                );
-                // console.log(response.data);
-                // On copie le tableau et on push les infos souhaitées
-                const newProduct = [...listing];
+                const productData = await AsyncStorage.getItem("productData");
+                // console.log("4");
+                // console.log(productData);
 
-                // Si le produit n'est pas présent
-                if (newProduct.indexOf(response.data.product.id) === -1) {
-                    newProduct.push({
-                        code: response.data.product.code,
-                        name: response.data.product.product_name,
-                        image: response.data.product.image_front_small_url,
-                        brand: response.data.product.brands,
-                        nutriscore: response.data.product.nutriscore_grade,
-                    });
-                    setListing(newProduct);
-                }
+                // Parse pour le passer dans le state
+                const productDataTab = JSON.parse(productData);
+                // console.log(4);
+                // console.log(productDataTab);
+
+                setListing(productDataTab);
 
                 setNutriscore(response.data.product.nutriscore_grade);
 
@@ -56,11 +48,11 @@ const ProductScreen = ({ productData, navigation }) => {
             }
         };
         fetchData();
-    }, [productData]);
+    }, []);
 
     return (
         <SafeAreaView style={styles.bg}>
-            {listing === [] ? (
+            {listing === null ? (
                 <Text>Nothing yet</Text>
             ) : (
                 <FlatList
@@ -139,7 +131,7 @@ const ProductScreen = ({ productData, navigation }) => {
         </SafeAreaView>
     );
 };
-export default ProductScreen;
+export default ProductsScreen;
 
 const styles = StyleSheet.create({
     bg: {

@@ -30,23 +30,23 @@ export default function App() {
     // const [productObj, setProductObj] = useState();
 
     // Enreigstrement de la Data passée
-    const setInfos = async (infos) => {
-        AsyncStorage.setItem("productData", infos);
+    // const setInfos = async (infos) => {
+    //     AsyncStorage.setItem("productData", infos);
 
-        setProductData(infos);
-    };
+    //     setProductData(infos);
+    // };
 
-    // Récupération de la data
-    useEffect(() => {
-        const bootstrapAsync = async () => {
-            const productData = await AsyncStorage.getItem("productData");
+    // // Récupération de la data
+    // useEffect(() => {
+    //     const bootstrapAsync = async () => {
+    //         const productData = await AsyncStorage.getItem("productData");
 
-            setProductData(productData); // Récupére et Stock la data du code barre pour l'envoyer dans l'historique
-        };
-        // console.log(productData);
+    //         setProductData(productData); // Récupére et Stock la data du code barre pour l'envoyer dans l'historique
+    //     };
+    //     // console.log(productData);
 
-        bootstrapAsync();
-    }, []);
+    //     bootstrapAsync();
+    // }, []);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -109,14 +109,7 @@ export default function App() {
                                                     title: "Historique",
                                                 }}
                                             >
-                                                {(props) => (
-                                                    <ProductsScreen
-                                                        {...props}
-                                                        productData={
-                                                            productData
-                                                        }
-                                                    />
-                                                )}
+                                                {() => <ProductsScreen />}
                                             </Stack.Screen>
 
                                             <Stack.Screen
@@ -155,11 +148,7 @@ export default function App() {
                                                     headerShown: false,
                                                 }}
                                             >
-                                                {() => (
-                                                    <CameraScreen
-                                                        setInfos={setInfos}
-                                                    />
-                                                )}
+                                                {() => <CameraScreen />}
                                             </Stack.Screen>
 
                                             <Stack.Screen

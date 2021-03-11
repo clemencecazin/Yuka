@@ -76,7 +76,7 @@ const CameraScreen = ({ setInfos }) => {
 
         // console.log(setData);
 
-        setInfos(data);
+        // setInfos(data);
     };
 
     if (hasPermission === null) {

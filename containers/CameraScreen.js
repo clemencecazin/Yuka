@@ -42,12 +42,16 @@ const CameraScreen = ({ setInfos }) => {
     const handleBarCodeScanned = ({ type, data }) => {
         // console.log(data);
         setScanned(true);
+
+        if (data) {
+            nav.push("Product", { data: data });
+        }
         setMessageProduct(
             <>
                 Votre produit a bien été scanné
                 <Button
-                    color="blue"
-                    title="Go to Produit"
+                    style={styles.button}
+                    title="Accéder au produit"
                     onPress={() => {
                         nav.navigate("Product", { data: data });
                     }}
@@ -121,14 +125,16 @@ const CameraScreen = ({ setInfos }) => {
                     </>
                 )}
             </View>
-            <Text style={styles.text}>{messageProduct}</Text>
-
-            <Text style={styles.text}>{data}</Text>
+            <View style={styles.scanned}>
+                <Text style={styles.text}>{messageProduct}</Text>
+            </View>
         </>
     );
 };
 export default CameraScreen;
 
 const styles = StyleSheet.create({
-    text: { fontSize: 24, color: "red" },
+    text: { fontSize: 24, color: "black" },
+    scanned: { padding: 20 },
+    button: { alignItems: "center", backgroundColor: "green", color: "red" },
 });

@@ -14,6 +14,13 @@ import {
 import { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/core";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ProductInfos from "../components/ProductInfos";
+import {
+    FontAwesome,
+    MaterialIcons,
+    MaterialCommunityIcons,
+    Entypo,
+} from "@expo/vector-icons";
 
 const axios = require("axios");
 
@@ -22,10 +29,11 @@ const axios = require("axios");
 // Possibilité d'ajouter en favoris -> envoi
 
 const ProductScreen = () => {
-    const [messageFav, setMessageFav] = useState("");
     const [detailsProduct, setdetailsProduct] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [nutriscore, setNutriscore] = useState();
+    const [data, setData] = useState([]);
+    const [fav, setFav] = useState(false);
 
     const { params } = useRoute();
     // const id = route.params.data;
@@ -50,8 +58,13 @@ const ProductScreen = () => {
                     code: response.data.product.code,
                 };
 
-                console.log("Step 1");
-                console.log(objectToStore);
+                setData(objectToStore);
+
+                console.log("salt");
+                console.log(objectToStore.nutrition.salt);
+
+                // console.log("Step 1");
+                // console.log(objectToStore);
                 // Récupère les données déjà présente ou non dans le tableau
                 const previousData = await AsyncStorage.getItem("productData");
 
@@ -62,20 +75,20 @@ const ProductScreen = () => {
                     const value = JSON.stringify([objectToStore]);
 
                     await AsyncStorage.setItem("productData", value);
-                    console.log("Step 2");
-                    console.log(value);
+                    // console.log("Step 2");
+                    // console.log(value);
                 } else {
                     // Si déjà un produit de scanné, ajout et sauvegarde du nouveau produit
                     // Parse pour pouvoir ajouter le nouveau produit
                     const tabData = JSON.parse(previousData);
-                    console.log("Step tabData");
+                    // console.log("Step tabData");
 
-                    console.log(tabData);
+                    // console.log(tabData);
 
                     // Condition si le produit est déjà présent message d'alerte
                     let presentProduct = false;
                     for (let i = 0; i < tabData.length; i++) {
-                        console.log(objectToStore.code);
+                        // console.log(objectToStore.code);
                         if (tabData[i].code === objectToStore.code) {
                             presentProduct = true;
                         }
@@ -88,8 +101,8 @@ const ProductScreen = () => {
 
                     // Sauvegarde tous les produits ajoutés
                     const value = JSON.stringify(tabData);
-                    console.log("3");
-                    console.log(value);
+                    // console.log("3");
+                    // console.log(value);
                     await AsyncStorage.setItem("productData", value);
                 }
 
@@ -133,7 +146,7 @@ const ProductScreen = () => {
                 // console.log(tabFavorites[i].code);
                 if (tabFavorites[i].code === objectToStore.code) {
                     presentProduct = true;
-                    setMessageFav("Le produit a déjà été scanné");
+                    setMessageFav("Le produit a déjà été ajouté aux favoris");
                 }
             }
 
@@ -141,6 +154,7 @@ const ProductScreen = () => {
             if (presentProduct === false) {
                 tabFavorites.push(objectToStore);
                 setMessageFav("Produits ajouté en favoris");
+                setFav(true);
             }
 
             // Sauvegarde tous les produits ajoutés
@@ -151,50 +165,100 @@ const ProductScreen = () => {
         }
     };
 
+    const circleNote = (info) => {
+        if (info === "low") {
+            return (
+                <>
+                    <Text style={{ color: "grey" }}>Faible </Text>
+                    <View style={styles.score}>
+                        <FontAwesome name="circle" size={18} color="#5ac461" />
+                    </View>
+                </>
+            );
+        } else if (info === "moderate") {
+            return (
+                <>
+                    <Text style={{ color: "grey" }}>Moyen </Text>
+                    <FontAwesome
+                        style={styles.score}
+                        name="circle"
+                        size={18}
+                        color="#ec9036"
+                    />
+                </>
+            );
+        } else if (info === "high") {
+            return (
+                <>
+                    <Text style={{ color: "grey" }}>Elevé </Text>
+                    <FontAwesome name="circle" size={18} color="#de4b5e" />
+                </>
+            );
+        }
+    };
+
     return isLoading ? (
         <ActivityIndicator size="large" color="black" />
     ) : (
-        <SafeAreaView style={styles.bg}>
+        <SafeAreaView style={styles.bg} key={objectToStore.code}>
             <ScrollView>
                 {/* <Text>data : {params.data}</Text> */}
                 <View style={styles.container}>
-                    <View style={styles.containerProduct}>
-                        <Image
-                            source={{ uri: objectToStore.picture }}
-                            style={styles.productImage}
-                            resizeMode="contain"
-                        />
-                        <View style={styles.descProduct}>
-                            <Text style={styles.name}>
-                                {objectToStore.name}
-                            </Text>
-                            <Text style={styles.brand}>
-                                {objectToStore.brand}
-                            </Text>
-                            <Text>{nutriscore}</Text>
-                        </View>
-                    </View>
-                    <Text>{objectToStore.ecoscore}</Text>
+                    <ProductInfos
+                        data={objectToStore}
+                        addFavorites={addFavorites}
+                        fav={fav}
+                    />
 
                     {/* Nutriments */}
                     <Text style={styles.title}>Nutriments</Text>
 
-                    <Text style={styles.details}>
-                        Surgar : {objectToStore.nutrition.sugars}
-                    </Text>
-                    <Text style={styles.details}>
-                        Surgar : {objectToStore.nutrition.salts}
-                    </Text>
-                    <Text style={styles.details}>
-                        Fat : {objectToStore.nutrition.fat}
-                    </Text>
-                    <Button
-                        title="Add to favorites"
-                        onPress={() => {
-                            addFavorites();
-                        }}
-                    ></Button>
-                    <Text style={styles.fav}>{messageFav}</Text>
+                    {objectToStore.nutrition.sugars !== "undefined" && (
+                        <View style={styles.details}>
+                            <View style={styles.nutri}>
+                                <MaterialCommunityIcons
+                                    name="spoon-sugar"
+                                    size={38}
+                                    color="black"
+                                />
+
+                                <Text style={styles.nutriName}>Sugar</Text>
+                            </View>
+                            <Text>
+                                {circleNote(objectToStore.nutrition.sugars)}
+                            </Text>
+                        </View>
+                    )}
+
+                    {objectToStore.nutrition.salt !== "" ? (
+                        <View style={styles.details}>
+                            <View style={styles.nutri}>
+                                <MaterialIcons
+                                    name="grain"
+                                    size={38}
+                                    color="black"
+                                />
+
+                                <Text style={styles.nutriName}>Salt</Text>
+                            </View>
+                            <Text>
+                                {circleNote(objectToStore.nutrition.salt)}
+                            </Text>
+                        </View>
+                    ) : (
+                        ""
+                    )}
+                    {objectToStore.nutrition.fat !== "undefined" && (
+                        <View style={styles.details}>
+                            <View style={styles.nutri}>
+                                <Entypo name="drop" size={38} color="black" />
+                                <Text style={styles.nutriName}>Fat</Text>
+                            </View>
+                            <Text>
+                                {circleNote(objectToStore.nutrition.fat)}
+                            </Text>
+                        </View>
+                    )}
 
                     <View>
                         <Text style={styles.title}>Ingrédient</Text>
@@ -205,7 +269,9 @@ const ProductScreen = () => {
                         {objectToStore.ingredient.map((product, index) => {
                             return (
                                 <View key={product.code}>
-                                    <Text>{product.text}</Text>
+                                    <Text style={styles.ingredient}>
+                                        {product.text}
+                                    </Text>
                                 </View>
                             );
                         })}
@@ -254,5 +320,25 @@ const styles = StyleSheet.create({
     brand: { fontSize: 12, paddingVertical: 10, color: "grey" },
     name: { fontWeight: "bold", marginTop: 20 },
     title: { fontSize: 24, fontWeight: "bold" },
-    details: { fontSize: 16, padding: 10 },
+    details: {
+        marginTop: 0,
+        fontSize: 16,
+        padding: 10,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        borderBottomColor: "lightgrey",
+        borderBottomWidth: 0.5,
+        marginBottom: 30,
+    },
+    score: { justifyContent: "flex-end" },
+    nutri: { flexDirection: "row" },
+    nutriName: {
+        fontSize: 18,
+        marginLeft: 20,
+        alignItems: "center",
+    },
+    ingredient: {
+        paddingVertical: 10,
+        fontSize: 16,
+    },
 });

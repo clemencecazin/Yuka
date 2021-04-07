@@ -15,6 +15,7 @@ import { useState, useEffect } from "react/cjs/react.development";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import ProductInfos from "../components/ProductInfos";
 
 // Reçoit donnée du produit ajouté en favoris
 
@@ -67,52 +68,6 @@ const FavoritesScreen = ({ navigation }) => {
         // return unsubscribe;
     }, [navigation]);
 
-    const renderNutriscore = (nutriscore) => {
-        // setNutriscore(detailsProduct[i].nutriscore);
-        // console.log(nutriscore);
-        if (nutriscore === "a") {
-            return (
-                <Image
-                    source={require("../assets/nutriscore_a.png")}
-                    style={styles.productImage}
-                    resizeMode="contain"
-                />
-            );
-        } else if (nutriscore === "b") {
-            return (
-                <Image
-                    source={require("../assets/nutriscore_b.png")}
-                    style={styles.productImage}
-                    resizeMode="contain"
-                />
-            );
-        } else if (nutriscore === "c") {
-            return (
-                <Image
-                    source={require("../assets/nutriscore_c.png")}
-                    style={styles.productImage}
-                    resizeMode="contain"
-                />
-            );
-        } else if (nutriscore === "d") {
-            return (
-                <Image
-                    source={require("../assets/nutriscore_d.png")}
-                    style={styles.productImage}
-                    resizeMode="contain"
-                />
-            );
-        } else if (nutriscore === "e") {
-            return (
-                <Image
-                    source={require("../assets/nutriscore_e.png")}
-                    style={styles.productImage}
-                    resizeMode="contain"
-                />
-            );
-        }
-    };
-
     // useEffect(() => {
     //     const bootsAsync = async () => {
     //         const productFavorite = await AsyncStorage.getItem(
@@ -132,59 +87,8 @@ const FavoritesScreen = ({ navigation }) => {
         <ActivityIndicator size="large" color="black" />
     ) : (
         <SafeAreaView>
-            <FlatList
-                data={listing}
-                renderItem={({ item }) => {
-                    return (
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.navigate(
-                                    "Product",
-                                    { data: item.code }
-                                    // Navigation vers Product avec la data à passer en param dans la fiche produit
-                                );
-                            }}
-                        >
-                            <View style={styles.containerProduct}>
-                                <Image
-                                    source={{ uri: item.picture }}
-                                    style={styles.productImage}
-                                    resizeMode="contain"
-                                />
-                                <View style={styles.descProduct}>
-                                    <Text style={styles.name} numberOfLines={2}>
-                                        {item.name}
-                                    </Text>
-                                    <Text style={styles.brand}>
-                                        {item.brand}
-                                    </Text>
-                                    <Text>
-                                        {renderNutriscore(item.nutriscore)}
-                                    </Text>
+            <ProductInfos listing={listing} />
 
-                                    {/* <View style={styles.nutriscore}> */}
-                                    {/* {item.nutriscore} */}
-                                    {/* <Text>{nutriscore}</Text> */}
-                                    {/* <Image
-                                                source={require("../assets/nutriscore_a.png")}
-                                                style={styles.productImage}
-                                                resizeMode="contain"
-                                            ></Image> */}
-                                    {/* </View> */}
-                                </View>
-                                <View style={styles.arrow}>
-                                    <MaterialIcons
-                                        name="keyboard-arrow-right"
-                                        size={34}
-                                        color="black"
-                                    />
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    );
-                }}
-                keyExtractor={(item) => item.code}
-            />
             {/* {listing.map((favProduct, index) => {
                 return (
                     <TouchableOpacity

@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ProductInfos from "../components/ProductInfos";
 
 const axios = require("axios");
 
@@ -62,56 +63,7 @@ const ProductsScreen = ({ navigation }) => {
         <ActivityIndicator size="large" color="black" />
     ) : (
         <SafeAreaView style={styles.bg}>
-            <FlatList
-                data={listing}
-                renderItem={({ item }) => {
-                    return (
-                        <TouchableOpacity
-                            onPress={() => {
-                                console.log("coucou");
-                                navigation.navigate(
-                                    "Product",
-                                    { data: item.code }
-                                    // Navigation vers Product avec la data à passer en param dans la fiche produit
-                                );
-                            }}
-                        >
-                            <View style={styles.containerProduct}>
-                                <Image
-                                    source={{ uri: item.picture }}
-                                    style={styles.productImage}
-                                    resizeMode="contain"
-                                />
-                                <View style={styles.descProduct}>
-                                    <Text style={styles.name} numberOfLines={2}>
-                                        {item.name}
-                                    </Text>
-                                    <Text style={styles.brand}>
-                                        {item.brand}
-                                    </Text>
-                                    <View style={styles.nutriscore}>
-                                        <Text>{item.nutriscore} </Text>
-                                        {/* <Text>{nutriscore}</Text> */}
-                                        {/* <Image
-                                                source={require("../assets/nutriscore_a.png")}
-                                                style={styles.productImage}
-                                                resizeMode="contain"
-                                            ></Image> */}
-                                    </View>
-                                </View>
-                                <View style={styles.arrow}>
-                                    <MaterialIcons
-                                        name="keyboard-arrow-right"
-                                        size={34}
-                                        color="black"
-                                    />
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    );
-                }}
-                keyExtractor={(item) => item.code}
-            />
+            <ProductInfos listing={listing} />
 
             {/* <Image source={{ uri: picture }} style={styles.productImage} />
                 <Text>{name}</Text>
